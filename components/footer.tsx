@@ -22,9 +22,9 @@ function Footer() {
             {/* Image section */}
             <div className="col-span-1 md:col-span-2 lg:col-start-1 lg:row-start-1">
               <img
-                src="https://tailwindui.com/img/logos/workflow-mark.svg?color=indigo&shade=600"
+                src="/Logo.png"
                 alt=""
-                className="h-8 w-auto"
+                className="h-8 w-20"
               />
             </div>
 
