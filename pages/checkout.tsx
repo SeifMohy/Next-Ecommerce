@@ -15,9 +15,9 @@ const deliveryMethods = [
     id: 1,
     title: 'Standard',
     turnaround: '4–10 business days',
-    price: '$5.00',
+    price: '5.00',
   },
-  { id: 2, title: 'Express', turnaround: '2–5 business days', price: '$16.00' },
+  { id: 2, title: 'Express', turnaround: '2–5 business days', price: '16.00' },
 ]
 const paymentMethods = [
   { id: 'credit-card', title: 'CreditCard' },
@@ -84,7 +84,7 @@ export default function Example() {
       // cardNumber: Yup.string().required('Required'),
       // cardName: Yup.string().required('Required'),
       // expiration: Yup.string().required('Required'),
-      cvc: Yup.number().min(3 , "three numbers").required('Required'),
+      cvc: Yup.string().min(3,"three numbers").max(3, "three numbers").required('Required'),
     }),
   })
 
@@ -362,7 +362,7 @@ export default function Example() {
                                     as="span"
                                     className="mt-6 text-sm font-medium text-gray-900"
                                   >
-                                    {deliveryMethod.price}
+                                    ${deliveryMethod.price}
                                   </RadioGroup.Description>
                                 </div>
                               </div>
@@ -623,19 +623,19 @@ export default function Example() {
                     <div className="flex items-center justify-between">
                       <dt className="text-sm">Shipping</dt>
                       <dd className="text-sm font-medium text-gray-900">
-                        $5.00
+                        ${selectedDeliveryMethod.price}
                       </dd>
                     </div>
                     <div className="flex items-center justify-between">
                       <dt className="text-sm">Taxes</dt>
                       <dd className="text-sm font-medium text-gray-900">
-                        $5.52
+                        ${subtotal*.2}
                       </dd>
                     </div>
                     <div className="flex items-center justify-between border-t border-gray-200 pt-6">
                       <dt className="text-base font-medium">Total</dt>
                       <dd className="text-base font-medium text-gray-900">
-                        ${subtotal + 5 + 5.52}
+                        ${subtotal + +selectedDeliveryMethod.price + subtotal*.2}
                       </dd>
                     </div>
                   </dl>
