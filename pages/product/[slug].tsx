@@ -8,7 +8,7 @@ import useSWR from 'swr'
 import { useRouter } from 'next/router'
 import { setCart } from 'redux/reducers/app'
 import { useDispatch, useSelector } from 'react-redux'
-import { Products } from 'types'
+import { Cart, Products } from 'types'
 
 const reviews = {
   href: '#',
@@ -58,7 +58,7 @@ export default function ProductPage() {
   //console.log(slug)
   const { data, error } = useSWR(`/api/products/${slug}`, fetcher)
 
-  const cartState = useSelector((state: any) => state.app.cart)
+  const cartState = useSelector((state: Cart) => state.app.cart)
   const findItem = cartState.find((item: Products) => item.slug === slug)
   //console.log(findItem)
   const disabled = findItem?.quantity >= data?.product.variants[0].avaiableQty

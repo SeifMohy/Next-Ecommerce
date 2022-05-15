@@ -1,7 +1,7 @@
 import type { NextPage } from 'next'
 import Layout from 'components/layout'
 import { useEffect, useState } from 'react'
-import { Product } from 'types'
+import { Cart, Product } from 'types'
 import axios from 'axios'
 import useSWR from 'swr'
 import Link from 'next/link'
@@ -40,7 +40,7 @@ const trendingProducts = [
     imageSrc:
       'https://tailwindui.com/img/ecommerce-images/home-page-04-trending-product-02.jpg',
     imageAlt: 'Hand stitched, orange leather long wallet.',
-  }
+  },
 ]
 const perks = [
   {
@@ -73,30 +73,32 @@ const perks = [
   },
 ]
 
-const fetcher = (url: string) => axios.get(url).then(res => res.data)
+const fetcher = (url: string) => axios.get(url).then((res) => res.data)
 
 const Home: NextPage = () => {
-// const [items, setItems] = useState<any|[]>([]);
+  // const [items, setItems] = useState<any|[]>([]);
 
-// async function fetchProducts(){
-//   const response = await fetch("/api/products")
-//   const data = response.json()
-//   .then(data => setItems(data.data.Products))
-//   //console.log("data", data)
-//   // setProducts(data);
-// }
+  // async function fetchProducts(){
+  //   const response = await fetch("/api/products")
+  //   const data = response.json()
+  //   .then(data => setItems(data.data.Products))
+  //   //console.log("data", data)
+  //   // setProducts(data);
+  // }
 
-// useEffect(() => {
-//   fetchProducts()
-//   console.log(items)
-// }, []);
+  // useEffect(() => {
+  //   fetchProducts()
+  //   console.log(items)
+  // }, []);
 
-//above is before setting SWR
+  //above is before setting SWR
 
-const { data, error } = useSWR('/api/products', fetcher)
-if(!data) return <div>loading...</div>
-const filtered = data.products.filter((product: any) => {return (product.trending === "TRUE")})
-console.log(filtered)
+  const { data, error } = useSWR('/api/products', fetcher)
+  if (!data) return <div>loading...</div>
+  const filtered = data.products.filter((product: Cart) => {
+    return product.trending === 'TRUE'
+  })
+  console.log(filtered)
   return (
     <div className="">
       <Layout>
@@ -219,32 +221,31 @@ console.log(filtered)
               </div>
 
               <div className="mt-6 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 md:grid-cols-4 md:gap-y-0 lg:gap-x-8">
-                {
-                filtered.map((product: any) => {
-                  return(
+                {filtered.map((product: Cart) => {
+                  return (
                     <Link href={`/product/${product.slug}`}>
-                    <div key={product.id} className="group relative">
-                    <div className="h-56 w-full overflow-hidden rounded-md group-hover:opacity-75 lg:h-72 xl:h-80">
-                      <img
-                        src={product.images[0].imageSrc}
-                        alt={product.images[0].imageAlt}
-                        className="h-full w-full object-cover object-center"
-                      />
-                    </div>
-                    <h3 className="mt-4 text-sm text-gray-700">
-                      <a href={product.slug}>
-                        <span className="absolute inset-0" />
-                        {product.name}
-                      </a>
-                    </h3>
-                    <p className="mt-1 text-sm text-gray-500">
-                      {product.variants[0].color}
-                    </p>
-                    <p className="mt-1 text-sm font-medium text-gray-900">
-                      ${product.variants[0].price}
-                    </p>
-                  </div>
-                  </Link>
+                      <div key={product.id} className="group relative">
+                        <div className="h-56 w-full overflow-hidden rounded-md group-hover:opacity-75 lg:h-72 xl:h-80">
+                          <img
+                            src={product.images[0].imageSrc}
+                            alt={product.images[0].imageAlt}
+                            className="h-full w-full object-cover object-center"
+                          />
+                        </div>
+                        <h3 className="mt-4 text-sm text-gray-700">
+                          <a href={product.slug}>
+                            <span className="absolute inset-0" />
+                            {product.name}
+                          </a>
+                        </h3>
+                        <p className="mt-1 text-sm text-gray-500">
+                          {product.variants[0].color}
+                        </p>
+                        <p className="mt-1 text-sm font-medium text-gray-900">
+                          ${product.variants[0].price}
+                        </p>
+                      </div>
+                    </Link>
                   )
                 })}
               </div>
@@ -307,4 +308,3 @@ export default Home
 function async(arg0: () => void) {
   throw new Error('Function not implemented.')
 }
-

@@ -4,6 +4,7 @@ import { classNames } from 'lib'
 import Link from 'next/link'
 import { Fragment, useState } from 'react'
 import { useSelector } from 'react-redux'
+import { Cart } from 'types'
 import Drawer from './drawer'
 import ShoppingCartDrawer from './shoppingCartDrawer'
 const navigation = {
@@ -92,7 +93,7 @@ function Header() {
   const [open, setOpen] = useState(false)
   const [openShoppingCart, setOpenShoppingCart] = useState(false)
 
-  const cart = useSelector((state: any) => state.app.cart)
+  const cart = useSelector((state: Cart) => state.app.cart)
 
   const cartCount = cart.length
 

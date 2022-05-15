@@ -173,7 +173,7 @@ function Drawer({ open, setOpen }: props) {
                               />
                             </div>
                             <a
-                              href={item.href}
+                              href={item.slug}
                               className="mt-6 block text-sm font-medium text-gray-900"
                             >
                               <span

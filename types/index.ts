@@ -20,11 +20,6 @@ export type Category = {
   name: string
   featured: Product[]
 }
-export type AppStateType = {
-  products: Product[]
-  categories: Category[]
-  cart: CartItem[]
-}
 
 export type Page = {
     name: string;
@@ -38,6 +33,12 @@ export type Navigation = {
 //make each type alone and export
 //create google sheets response type
 
+export type AppStateType = {
+  products: Products[]
+  categories: Categories[]
+  cart: Cart[]
+}
+
 export type Products ={
     id: string
     name: string
@@ -46,6 +47,16 @@ export type Products ={
     categoryId: string
     trending: string
     featured: string
+}
+export interface Cart extends Products {
+  images: any
+  variants: ProductVariants[]
+  app: any
+  quantity: number
+}
+export type Dropdown ={
+  value: string 
+  id: string
 }
 export type Categories ={
     id: string

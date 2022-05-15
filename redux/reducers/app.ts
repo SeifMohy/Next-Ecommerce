@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { AppStateType, CartItem, Category, Product } from 'types'
+import { AppStateType, Cart, Dropdown} from 'types'
 
 const initialState: AppStateType = {
   products: [],
@@ -11,13 +11,7 @@ export const appSlice = createSlice({
   name: 'app',
   initialState,
   reducers: {
-    setProducts: (state, { payload }: { payload: Product[] }) => {
-      state.products = payload
-    },
-    setCategories(state, { payload }: { payload: Category[] }) {
-      state.categories = payload
-    },
-    setCart(state, { payload }: { payload: Product }) {
+    setCart(state, { payload }: { payload: Cart }) {
       const checkCartItem = state.cart.find((item) => +item.id === +payload.id)
       // console.log(checkCartItem)
       console.log(payload)
@@ -31,16 +25,16 @@ export const appSlice = createSlice({
       }
       console.log('state', JSON.stringify(state.cart))
     },
-    updateCart(state, { payload }: any) {
+    updateCart(state, { payload }: { payload: Dropdown }) {
       console.log(payload)
       const itemToUpdate = state.cart.find((item) => item.id === payload.id)
       //console.log(JSON.stringify(itemToUpdate))
       if (itemToUpdate) {
-        itemToUpdate.quantity = payload.value
+        itemToUpdate.quantity = +payload.value
       }
     },
-    removeItem(state, { payload }: any) {
-      const newCart = state.cart.filter((item) => item.id !== payload)
+    removeItem(state, { payload }: { payload: Number }) {
+      const newCart = state.cart.filter((item) => +item.id !== payload)
       if (newCart) {
         state.cart = newCart
       }
@@ -48,7 +42,7 @@ export const appSlice = createSlice({
   },
 })
 
-export const { setProducts, setCategories, setCart, updateCart, removeItem } =
+export const { setCart, updateCart, removeItem } =
   appSlice.actions
 
 export default appSlice.reducer

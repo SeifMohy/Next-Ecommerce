@@ -6,7 +6,7 @@ import { classNames } from 'lib'
 import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { removeItem, updateCart } from 'redux/reducers/app'
-import { Product, ProductImages, Products } from 'types'
+import { Cart } from 'types'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
@@ -30,11 +30,11 @@ export default function Example() {
   const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState(
     deliveryMethods[0]
   )
-  const data = useSelector((state: any) => state.app.cart)
+  const data = useSelector((state: Cart) => state.app.cart)
 
   const subtotal = addingUp(data)
 
-  function addingUp(arr: any[]) {
+  function addingUp(arr: Cart[]) {
     let total = 0
     for (const item of arr) {
       total = total + +item.variants[0].price * +item.quantity
@@ -84,7 +84,10 @@ export default function Example() {
       // cardNumber: Yup.string().required('Required'),
       // cardName: Yup.string().required('Required'),
       // expiration: Yup.string().required('Required'),
-      cvc: Yup.string().min(3,"three numbers").max(3, "three numbers").required('Required'),
+      cvc: Yup.string()
+        .min(3, 'three numbers')
+        .max(3, 'three numbers')
+        .required('Required'),
     }),
   })
 
@@ -535,83 +538,79 @@ export default function Example() {
                 <div className="mt-4 rounded-lg border border-gray-200 bg-white shadow-sm">
                   <h3 className="sr-only">Items in your cart</h3>
                   <ul role="list" className="divide-y divide-gray-200">
-                    {data.map(
-                      (
-                        product: any //TODO: fix type
-                      ) => (
-                        <li key={product.id} className="flex py-6 px-4 sm:px-6">
-                          <div className="flex-shrink-0">
-                            <img
-                              src={product.images[0].imageSrc}
-                              alt={product.images[0].imageAlt}
-                              className="w-20 rounded-md"
-                            />
-                          </div>
+                    {data.map((product: Cart) => (
+                      <li key={product.id} className="flex py-6 px-4 sm:px-6">
+                        <div className="flex-shrink-0">
+                          <img
+                            src={product.images[0].imageSrc}
+                            alt={product.images[0].imageAlt}
+                            className="w-20 rounded-md"
+                          />
+                        </div>
 
-                          <div className="ml-6 flex flex-1 flex-col">
-                            <div className="flex">
-                              <div className="min-w-0 flex-1">
-                                <h4 className="text-sm">
-                                  <a
-                                    href={product.href}
-                                    className="font-medium text-gray-700 hover:text-gray-800"
-                                  >
-                                    {product.name}
-                                  </a>
-                                </h4>
-                                <p className="mt-1 text-sm text-gray-500">
-                                  {product.variants[0].color}
-                                </p>
-                                <p className="mt-1 text-sm text-gray-500">
-                                  {product.variants[0].color}
-                                </p>
-                              </div>
-
-                              <div className="ml-4 flow-root flex-shrink-0">
-                                <button
-                                  type="button"
-                                  className="-m-2.5 flex items-center justify-center bg-white p-2.5 text-gray-400 hover:text-gray-500"
+                        <div className="ml-6 flex flex-1 flex-col">
+                          <div className="flex">
+                            <div className="min-w-0 flex-1">
+                              <h4 className="text-sm">
+                                <a
+                                  href={product.slug}
+                                  className="font-medium text-gray-700 hover:text-gray-800"
                                 >
-                                  <span className="sr-only">Remove</span>
-                                  <TrashIcon
-                                    className="h-5 w-5"
-                                    aria-hidden="true"
-                                    onClick={() => {
-                                      dispatch(removeItem(product.id))
-                                    }}
-                                  />
-                                </button>
-                              </div>
+                                  {product.name}
+                                </a>
+                              </h4>
+                              <p className="mt-1 text-sm text-gray-500">
+                                {product.variants[0].color}
+                              </p>
+                              <p className="mt-1 text-sm text-gray-500">
+                                {product.variants[0].color}
+                              </p>
                             </div>
 
-                            <div className="flex flex-1 items-end justify-between pt-2">
-                              <p className="mt-1 text-sm font-medium text-gray-900">
-                                {`$` +
-                                  product.variants[0].price * +product.quantity}
-                              </p>
-
-                              <div className="ml-4">
-                                <label htmlFor="quantity" className="sr-only">
-                                  Quantity
-                                </label>
-                                <Dropdown
-                                  onChange={(value) => {
-                                    console.log('hello world' + value)
-                                    const data = { id: product.id, value }
-                                    dispatch(updateCart(data))
+                            <div className="ml-4 flow-root flex-shrink-0">
+                              <button
+                                type="button"
+                                className="-m-2.5 flex items-center justify-center bg-white p-2.5 text-gray-400 hover:text-gray-500"
+                              >
+                                <span className="sr-only">Remove</span>
+                                <TrashIcon
+                                  className="h-5 w-5"
+                                  aria-hidden="true"
+                                  onClick={() => {
+                                    dispatch(removeItem(+product.id))
                                   }}
-                                  values={Array.from(
-                                    Array(+product.variants[0].avaiableQty),
-                                    (_, i) => i + 1
-                                  )}
-                                  value={product.quantity}
                                 />
-                              </div>
+                              </button>
                             </div>
                           </div>
-                        </li>
-                      )
-                    )}
+
+                          <div className="flex flex-1 items-end justify-between pt-2">
+                            <p className="mt-1 text-sm font-medium text-gray-900">
+                              {`$` +
+                                +product.variants[0].price * +product.quantity}
+                            </p>
+
+                            <div className="ml-4">
+                              <label htmlFor="quantity" className="sr-only">
+                                Quantity
+                              </label>
+                              <Dropdown
+                                onChange={(value) => {
+                                  console.log('hello world' + value)
+                                  const data = { id: product.id, value }
+                                  dispatch(updateCart(data))
+                                }}
+                                values={Array.from(
+                                  Array(+product.variants[0].avaiableQty),
+                                  (_, i) => i + 1
+                                )}
+                                value={product.quantity}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                    ))}
                   </ul>
                   <dl className="space-y-6 border-t border-gray-200 py-6 px-4 sm:px-6">
                     <div className="flex items-center justify-between">
@@ -629,13 +628,16 @@ export default function Example() {
                     <div className="flex items-center justify-between">
                       <dt className="text-sm">Taxes</dt>
                       <dd className="text-sm font-medium text-gray-900">
-                        ${subtotal*.2}
+                        ${subtotal * 0.2}
                       </dd>
                     </div>
                     <div className="flex items-center justify-between border-t border-gray-200 pt-6">
                       <dt className="text-base font-medium">Total</dt>
                       <dd className="text-base font-medium text-gray-900">
-                        ${subtotal + +selectedDeliveryMethod.price + subtotal*.2}
+                        $
+                        {subtotal +
+                          +selectedDeliveryMethod.price +
+                          subtotal * 0.2}
                       </dd>
                     </div>
                   </dl>
