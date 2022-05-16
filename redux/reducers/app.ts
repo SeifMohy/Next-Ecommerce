@@ -22,6 +22,7 @@ const initialState: AppStateType = {
     phone: "",
     postalCode: "",
     region: "",
+    orderId: "",
 }}
 
 export const appSlice = createSlice({
@@ -58,6 +59,7 @@ export const appSlice = createSlice({
     },
     setOrder(state, {payload}: {payload : Order}) {
       state.order = payload
+      state.cart = []
     }
   },
 })

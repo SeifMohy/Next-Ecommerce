@@ -9,6 +9,7 @@ import { removeItem, setOrder, updateCart } from 'redux/reducers/app'
 import { Cart } from 'types'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
+import { v4 as uuid } from 'uuid';
 
 const deliveryMethods = [
   {
@@ -24,6 +25,8 @@ const paymentMethods = [
   { id: 'paypal', title: 'PayPal' },
   { id: 'etransfer', title: 'eTransfer' },
 ]
+
+const unique_id = uuid();
 
 export default function Example() {
   const [open, setOpen] = useState(false)
@@ -56,7 +59,7 @@ export default function Example() {
       region: '',
       postalCode: '',
       phone: '',
-      paymentMethod: '',
+      paymentMethod: 'CreditCard',
       cardNumber: '',
       cardName: '',
       expiration: '',
@@ -64,12 +67,21 @@ export default function Example() {
       Items: data,
     },
     onSubmit: async (values) => {
-      console.log(values)
-      dispatch(setOrder(values))
-      formik.resetForm();
-      // const response = await api.addOrder(values);
-      // const ordId = response.data.id;
-      // navigate(`/orderplaced/${ordId}`);
+      //console.log(values)
+      //sending to API
+      const post = await fetch('/api/products/order', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          "Accept": 'application/json',
+        },
+        body: JSON.stringify({...values, orderId: unique_id})
+      })
+      dispatch(setOrder({...values, orderId: unique_id}))
+      formik.resetForm()
+      const response = await post.json();
+      console.log(response)
+      //navigate(`/orderplaced/${ordId}`); TODO: should redirect to check out page / send email / resetting
     },
     validationSchema: Yup.object({
       email: Yup.string().email('Invalid Email').required('Required'),

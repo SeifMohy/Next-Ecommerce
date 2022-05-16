@@ -50,6 +50,7 @@ export type Products = {
   featured: string
 }
 export interface Cart extends Products {
+  orderId: any
   images: Images[]
   variants: ProductVariants[]
   app: any
@@ -102,6 +103,7 @@ export type Order = {
   phone: string
   postalCode: string
   region: string
+  orderId: string
 }
 export type GoogleSheetResponse = {
   Products: Products[]
