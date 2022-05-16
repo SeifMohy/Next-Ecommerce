@@ -5,7 +5,7 @@ import Layout from 'components/layout'
 import { classNames } from 'lib'
 import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { removeItem, updateCart } from 'redux/reducers/app'
+import { removeItem, setOrder, updateCart } from 'redux/reducers/app'
 import { Cart } from 'types'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
@@ -64,8 +64,9 @@ export default function Example() {
       Items: data,
     },
     onSubmit: async (values) => {
-      //formik.resetForm();
       console.log(values)
+      dispatch(setOrder(values))
+      formik.resetForm();
       // const response = await api.addOrder(values);
       // const ordId = response.data.id;
       // navigate(`/orderplaced/${ordId}`);
@@ -604,7 +605,7 @@ export default function Example() {
                                   Array(+product.variants[0].avaiableQty),
                                   (_, i) => i + 1
                                 )}
-                                value={product.quantity}
+                                defaultValue={product.quantity}
                               />
                             </div>
                           </div>
@@ -646,7 +647,10 @@ export default function Example() {
                     <button
                       type="submit"
                       className="w-full rounded-md border border-transparent bg-indigo-600 py-3 px-4 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
-                      onClick={formik.handleSubmit}
+                      onClick={(event: React.MouseEvent<HTMLElement>) => {
+                        event.preventDefault()
+                        formik.handleSubmit()
+                      }}
                     >
                       Confirm order
                     </button>

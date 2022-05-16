@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { Fragment } from 'react'
 import { useSelector , useDispatch} from 'react-redux'
 import { removeItem, updateCart } from 'redux/reducers/app'
-import { CartItem, Product } from 'types'
+import { Cart, CartItem, Product } from 'types'
 import Dropdown from './dropdown'
 
 
@@ -15,7 +15,7 @@ type props = {
 }
 
 export default function ShoppingCartDrawer({ open, setOpen }: props) {
-  const data = useSelector((state: any) => state.app.cart)
+  const data = useSelector((state: Cart) => state.app.cart)
   //console.log(data)
   const dispatch = useDispatch()
   const subtotal = addingUp(data)
@@ -118,7 +118,7 @@ export default function ShoppingCartDrawer({ open, setOpen }: props) {
                                           Array(+product.variants[0].avaiableQty),
                                           (_, i) => i + 1
                                         )}
-                                        value={product.quantity}
+                                        defaultValue={product.quantity}
                                       />
                                     </p>
 

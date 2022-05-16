@@ -1,11 +1,28 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { AppStateType, Cart, Dropdown} from 'types'
+import { AppStateType, Cart, Dropdown, Order} from 'types'
 
 const initialState: AppStateType = {
   products: [],
   categories: [],
   cart: [],
-}
+  order: {  
+    Items: [],
+    address: "",
+    apartment: "",
+    cardName: "",
+    cardNumber: "",
+    city: "",
+    country: "",
+    cvc: "",
+    email: "",
+    expiration: "",
+    firstName: "",
+    lastName: "",
+    paymentMethod: "",
+    phone: "",
+    postalCode: "",
+    region: "",
+}}
 
 export const appSlice = createSlice({
   name: 'app',
@@ -39,10 +56,13 @@ export const appSlice = createSlice({
         state.cart = newCart
       }
     },
+    setOrder(state, {payload}: {payload : Order}) {
+      state.order = payload
+    }
   },
 })
 
-export const { setCart, updateCart, removeItem } =
+export const { setCart, updateCart, removeItem, setOrder } =
   appSlice.actions
 
 export default appSlice.reducer
