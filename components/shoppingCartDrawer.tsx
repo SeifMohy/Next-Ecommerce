@@ -20,7 +20,7 @@ export default function ShoppingCartDrawer({ open, setOpen }: props) {
   const dispatch = useDispatch()
   const subtotal = addingUp(data)
 
-  function addingUp(arr: any[]) {
+  function addingUp(arr: Cart[]) {
     let total = 0
     for (const item of arr){
      total = total + (+item.variants[0].price * +item.quantity)
@@ -81,7 +81,7 @@ export default function ShoppingCartDrawer({ open, setOpen }: props) {
                             role="list"
                             className="-my-6 divide-y divide-gray-200"
                           >
-                            {data.map((product: any) => (
+                            {data.map((product: Cart) => (
                               <li key={product.id} className="flex py-6">
                                 <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                                   <img
@@ -100,7 +100,7 @@ export default function ShoppingCartDrawer({ open, setOpen }: props) {
                                           {product.name}{' '}
                                         </a>
                                       </h3>
-                                      <p className="ml-4">{`$`+product.variants[0].price * +product.quantity}</p>
+                                      <p className="ml-4">{`$ ${+product.variants[0].price * +product.quantity}`}</p>
                                     </div>
                                     <p className="mt-1 text-sm text-gray-500">
                                       {product.variants[0].color}
@@ -127,7 +127,7 @@ export default function ShoppingCartDrawer({ open, setOpen }: props) {
                                         type="button"
                                         className="font-medium text-indigo-600 hover:text-indigo-500"
                                         onClick={()=>{
-                                          dispatch(removeItem(product.id))
+                                          dispatch(removeItem(+product.id))
                                         }}
                                       >
                                         Remove

@@ -9,7 +9,8 @@ import { removeItem, setOrder, updateCart } from 'redux/reducers/app'
 import { Cart } from 'types'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { v4 as uuid } from 'uuid';
+import { v4 as uuid } from 'uuid'
+import { useRouter } from 'next/router'
 
 const deliveryMethods = [
   {
@@ -26,7 +27,7 @@ const paymentMethods = [
   { id: 'etransfer', title: 'eTransfer' },
 ]
 
-const unique_id = uuid();
+const unique_id = uuid()
 
 export default function Example() {
   const [open, setOpen] = useState(false)
@@ -46,6 +47,7 @@ export default function Example() {
   }
 
   const dispatch = useDispatch()
+  const router = useRouter()
 
   const formik = useFormik({
     initialValues: {
@@ -73,15 +75,15 @@ export default function Example() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          "Accept": 'application/json',
+          Accept: 'application/json',
         },
-        body: JSON.stringify({...values, orderId: unique_id})
+        body: JSON.stringify({ ...values, orderId: unique_id }),
       })
-      dispatch(setOrder({...values, orderId: unique_id}))
+      dispatch(setOrder({ ...values, orderId: unique_id }))
       formik.resetForm()
-      const response = await post.json();
+      const response = await post.json()
       console.log(response)
-      //navigate(`/orderplaced/${ordId}`); TODO: should redirect to check out page / send email / resetting
+      router.push(`/${unique_id}`) //TODO: should redirect to check out page / send email / resetting
     },
     validationSchema: Yup.object({
       email: Yup.string().email('Invalid Email').required('Required'),
