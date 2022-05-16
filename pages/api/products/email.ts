@@ -13,12 +13,12 @@ export default function handler(
   const mailgun = new Mailgun(formData)
   const mg = mailgun.client({
     username: 'api',
-    key: '13b0a340a7d366d6c0472fd2673004f5-5e7fba0f-39476433',
+    key: process.env.MAILGUN_KEY ,
   })
 
   mg.messages
-    .create("sandboxfb7e09289b35445796798c33996e8808.mailgun.org", {
-      from: 'Mailgun Sandbox <postmaster@sandboxfb7e09289b35445796798c33996e8808.mailgun.org>',
+    .create(!process.env.MAILGUN_DOMAIN, {
+      from: `Mailgun Sandbox <postmaster@${process.env.MAILGUN_DOMAIN}>`,
       to: ['accounts@tawwr.com'],
       subject: 'Hello',
       text: 'Testing some Mailgun awesomness!',
