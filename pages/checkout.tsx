@@ -84,6 +84,9 @@ export default function Example() {
       const response = await post.json()
       console.log(response)
       router.push(`/${unique_id}`) //TODO: should redirect to check out page / send email / resetting
+      const email = await fetch("/api/products/email")
+      const emailResponse = await email.json()
+      console.log(emailResponse)
     },
     validationSchema: Yup.object({
       email: Yup.string().email('Invalid Email').required('Required'),
